@@ -1,0 +1,15 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org.mongodb: WARN
+    org.springframework.data.mongodb: INFO
+    com.medilabo.noteservice: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
