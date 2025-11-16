@@ -1,0 +1,65 @@
+server:
+  port: ${SERVER_PORT:8080}
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: gateway-service
+  main:
+    # ✅ Mode Servlet (pas WebFlux)
+    web-application-type: servlet
+
+  # ✅ Datasource (conteneurisée)
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/medilabo_gateway?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:admin.01234}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+# ✅ URL du UI vue par la Gateway dans le réseau Docker
+ui:
+  base-url: ${UI_BASE_URL:http://patient-ui-service:8080}
+
+# ✅ Base du patient-service vue par la Gateway dans le réseau Docker
+patients:
+  backend:
+    base-url: ${PATIENTS_BACKEND_BASE_URL:http://patient-service:8080/api}
+
+notes:
+  backend:
+    base-url: ${NOTES_BACKEND_BASE_URL:http://note-service:8080/api}
+
+risk:
+  backend:
+    base-url: ${RISK_BACKEND_BASE_URL:http://risk-assessment-service:8080/api}
+
+# ✅ JWT attendus par SecurityConfig/JwtDecoder (au NIVEAU RACINE)
+security:
+  jwt:
+    secret: ${JWT_SECRET:0123456789abcdefghijklmnopqrstuvwxyz012345}
+    ttl-seconds: 43200
+    cookie:
+      name: JWT_TOKEN
+      secure: false     # HTTP en dev Docker
+      samesite: None    # partage inter-ports
+
+logging:
+  level:
+    org.springframework.security: INFO
+    com.medilabo.gatewayservice: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
