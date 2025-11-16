@@ -1,0 +1,20 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  thymeleaf:
+    cache: true
+    check-template-location: false
+
+patients:
+  api:
+    url: http://example.test/api/patients
+notes:
+  api:
+    url: http://example.test/api/notes
+risk:
+  api:
+    url: http://example.test/api/risk
+
+security:
+  jwt:
+    secret: test-test-test-test-test-test-1234567890
